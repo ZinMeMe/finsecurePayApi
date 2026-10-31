@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        IMAGE_NAME = 'zinmeme/finsecure-pay-api'
+        DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -10,7 +15,6 @@ pipeline {
 
         stage('Build & Unit Test') {
             steps {
-                // Using absolute path for Homebrew Maven on macOS
                 sh '/opt/homebrew/bin/mvn clean test'
             }
             post {
@@ -28,20 +32,16 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    appImage = docker.build("zinmeme/finsecure-pay-api:${BUILD_NUMBER}")
-                    appImage.tag("latest")
-                }
+                sh "docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} -t ${IMAGE_NAME}:latest ."
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
-                script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
-                        appImage.push()
-                        appImage.push("latest")
-                    }
+                withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
+                    sh "docker push ${IMAGE_NAME}:${BUILD_NUMBER}"
+                    sh "docker push ${IMAGE_NAME}:latest"
                 }
             }
         }
@@ -49,7 +49,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    sh "sed -i '' 's|<your-dockerhub-username>/finsecure-pay-api:v1.0.0|zinmeme/finsecure-pay-api:${BUILD_NUMBER}|g' k8s/deployment.yaml"
+                    sh "sed -i '' 's|<your-dockerhub-username>/finsecure-pay-api:v1.0.0|${IMAGE_NAME}:${BUILD_NUMBER}|g' k8s/deployment.yaml"
                     sh 'kubectl apply -f k8s/'
                 }
             }
