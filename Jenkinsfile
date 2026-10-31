@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'zinmeme/finsecure-pay-api'
-        DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
+        IMAGE_NAME = 'mezin139/finsecure-pay-api'
+        DOCKER_CREDENTIALS_ID = '3c71c5a4-56a6-48c6-9b77-4e714b4e8c72'
     }
 
     stages {
@@ -49,7 +49,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    sh "sed -i '' 's|<your-dockerhub-username>/finsecure-pay-api:v1.0.0|${IMAGE_NAME}:${BUILD_NUMBER}|g' k8s/deployment.yaml"
+                    sh "sed -i '' 's|mezin139/finsecure-pay-api:v1.0.0|${IMAGE_NAME}:${BUILD_NUMBER}|g' k8s/deployment.yaml"
                     sh 'kubectl apply -f k8s/'
                 }
             }
