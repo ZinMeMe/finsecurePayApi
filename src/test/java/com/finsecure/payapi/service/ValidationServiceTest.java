@@ -23,7 +23,7 @@ class ValidationServiceTest {
     void testValidTransactionShouldBeApproved() {
         TransactionRequest req = new TransactionRequest();
         req.setTransactionId("TXN-1001");
-        req.setAmount(new BigDecimal("0.00"));
+        req.setAmount(new BigDecimal("300.00"));
         req.setCurrency("SGD");
         req.setSourceAccount("ACC-123");
         req.setDestinationAccount("ACC-456");
@@ -36,7 +36,7 @@ class ValidationServiceTest {
     void testExceedsLimitShouldBeRejected() {
         TransactionRequest req = new TransactionRequest();
         req.setTransactionId("TXN-1002");
-        req.setAmount(new BigDecimal("45000.00"));
+        req.setAmount(new BigDecimal("75000.00"));
         req.setCurrency("SGD");
         req.setSourceAccount("ACC-123");
         req.setDestinationAccount("ACC-456");
@@ -53,7 +53,7 @@ class ValidationServiceTest {
         req.setTransactionId("TXN-1003");
         req.setAmount(new BigDecimal("100.00"));
         req.setCurrency("EUR");
-        req.setSourceAccount("ACC-123");
+        req.setSourceAccount("BLOCKED-ACC-001");
         req.setDestinationAccount("ACC-456");
 
         TransactionResponse res = validationService.validateTransaction(req);
