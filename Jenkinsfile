@@ -14,16 +14,13 @@ pipeline {
             }
         }
 
-        stage('Build & Unit Test') {
-            steps {
-                sh 'mvn clean test'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
-            }
-        }
+  stage('Build & Unit Test') {
+      steps {
+          withMaven(maven: 'Maven 3') {
+              sh 'mvn clean test'
+          }
+      }
+  }
 
         stage('Security & Quality Check') {
             steps {

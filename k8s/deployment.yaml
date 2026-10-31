@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: finsecure-pay-deployment
+  labels:
+    app: finsecure-pay
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: finsecure-pay
+  template:
+    metadata:
+      labels:
+        app: finsecure-pay
+    spec:
+      containers:
+        - name: finsecure-pay-api
+          image: mezin139/finsecure-pay-api:v1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: finsecure-config
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 5
