@@ -37,14 +37,14 @@ pipeline {
         }
 
         stage('Push to Docker Hub') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
-                    sh "docker push ${IMAGE_NAME}:${BUILD_NUMBER}"
-                    sh "docker push ${IMAGE_NAME}:latest"
+                    steps {
+                        withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                            sh "echo ${DOCKER_PASS} | /usr/local/bin/docker login -u ${DOCKER_USER} --password-stdin"
+                            sh "/usr/local/bin/docker push ${IMAGE_NAME}:${BUILD_NUMBER}"
+                            sh "/usr/local/bin/docker push ${IMAGE_NAME}:latest"
+                        }
+                    }
                 }
-            }
-        }
 
         stage('Deploy to Kubernetes') {
             steps {
