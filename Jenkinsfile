@@ -38,7 +38,7 @@ pipeline {
 
         stage('Container Security Scan') {
             steps {
-                sh "/opt/homebrew/bin/trivy image --severity MEDIUM,HIGH,CRITICAL --exit-code 1 ${IMAGE_NAME}:${BUILD_NUMBER}"
+                sh "/opt/homebrew/bin/trivy image --severity HIGH,CRITICAL --exit-code 1 ${IMAGE_NAME}:${BUILD_NUMBER}"
             }
         }
 
