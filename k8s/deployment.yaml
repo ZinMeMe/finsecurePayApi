@@ -23,6 +23,12 @@ spec:
           envFrom:
             - configMapRef:
                 name: finsecure-config
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: finsecure-secrets
+                  key: db-password
           resources:
             limits:
               cpu: "500m"
