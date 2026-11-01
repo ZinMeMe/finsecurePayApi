@@ -4,7 +4,7 @@ metadata:
   name: finsecure-pay-alerts
   namespace: monitoring
   labels:
-    release: prometheus-stack
+    release: monitoring
 spec:
   groups:
     - name: FinSecurePayAlerts

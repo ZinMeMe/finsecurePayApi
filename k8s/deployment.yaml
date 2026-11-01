@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: finsecure-pay-api
-          image: mezin139/finsecure-pay-api:v1.0.1
+          image: mezin139/finsecure-pay-api:v1.0.2
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
