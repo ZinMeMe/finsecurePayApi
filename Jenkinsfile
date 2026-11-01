@@ -62,12 +62,16 @@ pipeline {
         }
     }
 
-    post {
+ post {
         success {
-            echo 'Pipeline completed successfully! FinSecure Pay API deployed.'
+            emailext body: "SUCCESS: Build #${env.BUILD_NUMBER} passed successfully.\n\nDetails: ${env.BUILD_URL}",
+                     subject: "Jenkins Build Success: ${env.JOB_NAME} - #${env.BUILD_NUMBER}",
+                     to: 'mezinphyu@gmail.com'
         }
         failure {
-            echo 'Pipeline failed. Deployment halted.'
+            emailext body: "FAILURE: Build #${env.BUILD_NUMBER} failed. Check console output: ${env.BUILD_URL}console",
+                     subject: "Jenkins Build FAILED: ${env.JOB_NAME} - #${env.BUILD_NUMBER}",
+                     to: 'mezinphyu@gmail.com'
         }
     }
 }
