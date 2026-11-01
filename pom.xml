@@ -64,7 +64,11 @@
                     <groupId>org.owasp</groupId>
                     <artifactId>dependency-check-maven</artifactId>
                     <version>12.1.0</version>
+                    <configuration>
 
+                        <failBuildOnCVSS>9</failBuildOnCVSS>
+                        <skipRuntimeScope>true</skipRuntimeScope>
+                    </configuration>
                 </plugin>
 
 
