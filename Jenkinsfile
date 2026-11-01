@@ -55,7 +55,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    sh "sed -i '' 's|mezin139/finsecure-pay-api:v1.0.0|${IMAGE_NAME}:${BUILD_NUMBER}|g' k8s/deployment.yaml"
+                    sh "sed -i '' 's|mezin139/finsecure-pay-api:v1.0.2|${IMAGE_NAME}:${BUILD_NUMBER}|g' k8s/deployment.yaml"
                     sh '/usr/local/bin/kubectl apply -f k8s/'
                 }
             }
